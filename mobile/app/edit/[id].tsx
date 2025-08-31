@@ -10,7 +10,7 @@ import {
     Text,
 } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
-import { commonStyles, colors, typography } from "../../constants/styles";
+import { commonStyles, colors, typography, noteColors } from "../../constants/styles";
 import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -21,6 +21,7 @@ export default function EditNote() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [selectedColor, setSelectedColor] = useState(noteColors[0]);
     const router = useRouter();
 
     const API_URL = "http://192.168.1.105:8000";
@@ -33,7 +34,10 @@ export default function EditNote() {
                 if (!response.ok) throw new Error('Failed to load note');
                 const data = await response.json();
                 setTitle(data.title);
-                setContent(data.content);
+                setContent(data.content || '');
+                if (data.color) {
+                    setSelectedColor(data.color);
+                }
             } catch (err: unknown) {
                 const errorMessage = err instanceof Error ? err.message : 'Failed to load note';
                 setError(errorMessage);
@@ -65,7 +69,8 @@ export default function EditNote() {
                     },
                     body: JSON.stringify({
                         title: title.trim(),
-                        content: content.trim()
+                        content: content.trim(),
+                        color: selectedColor,
                     }),
                 });
 
@@ -153,15 +158,23 @@ export default function EditNote() {
                         />
 
                         {error && (
-                            <View style={{
-                                backgroundColor: '#ffebee',
-                                padding: 12,
-                                borderRadius: 8,
-                                marginTop: 8
-                            }}>
-                                <Text style={{ color: colors.error, textAlign: 'center' }}>{error}</Text>
-                            </View>
+                            <Text style={[commonStyles.errorText, { marginBottom: 16 }]}>{error}</Text>
                         )}
+
+                        <Text style={[typography.body, { marginBottom: 8 }]}>Choose a color:</Text>
+                        <View style={commonStyles.colorPicker}>
+                            {noteColors.map((color) => (
+                                <TouchableOpacity
+                                    key={color}
+                                    style={[
+                                        commonStyles.colorOption,
+                                        selectedColor === color && commonStyles.colorOptionSelected,
+                                        { backgroundColor: color }
+                                    ]}
+                                    onPress={() => setSelectedColor(color)}
+                                />
+                            ))}
+                        </View>
 
                         <View style={{ flexDirection: 'row', gap: 12, marginTop: 24 }}>
                             <TouchableOpacity

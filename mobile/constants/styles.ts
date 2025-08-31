@@ -12,6 +12,17 @@ export const colors = {
   success: '#2ecc71',
 };
 
+export const noteColors = [
+  '#ffffff', // white
+  '#f8e5e5', // light red
+  '#f8f5e5', // light yellow
+  '#e8f8e5', // light green
+  '#e5f8f5', // light teal
+  '#e5e8f8', // light blue
+  '#f0e5f8', // light purple
+  '#f8e5f0', // light pink
+];
+
 export const typography: {
   h1: TextStyle;
   h2: TextStyle;
@@ -37,9 +48,16 @@ interface Styles {
   container: ViewStyle;
   card: ViewStyle;
   input: TextStyle;
+  inputContainer: ViewStyle;
+  searchContainer: ViewStyle;
+  searchInnerContainer: ViewStyle;
+  searchInput: TextStyle;
   button: ViewStyle;
   buttonText: TextStyle;
   errorText: TextStyle;
+  colorPicker: ViewStyle;
+  colorOption: ViewStyle;
+  colorOptionSelected: ViewStyle;
 }
 
 export const commonStyles = StyleSheet.create<Styles>({
@@ -47,6 +65,41 @@ export const commonStyles = StyleSheet.create<Styles>({
     flex: 1,
     backgroundColor: colors.background,
     padding: 16,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.card,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 16,
+  },
+  searchContainer: {
+    marginBottom: 16,
+    paddingHorizontal: 2,
+  },
+  searchInnerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f5f5f5',
+    borderRadius: 10,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: colors.text,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    margin: 0,
   },
   card: {
     backgroundColor: colors.card,
@@ -83,6 +136,23 @@ export const commonStyles = StyleSheet.create<Styles>({
   },
   errorText: {
     color: colors.error,
-    marginBottom: 8,
+    fontSize: 14,
+    marginTop: 4,
+  },
+  colorPicker: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginVertical: 12,
+    gap: 8,
+  },
+  colorOption: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: 'transparent',
+  },
+  colorOptionSelected: {
+    borderColor: colors.primary,
   },
 });

@@ -10,7 +10,7 @@ import {
   ActivityIndicator, 
 } from "react-native";
 import { useRouter } from "expo-router";
-import { commonStyles, colors, typography } from "../constants/styles";
+import { commonStyles, colors, typography, noteColors } from "../constants/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddNote() {
@@ -18,6 +18,7 @@ export default function AddNote() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedColor, setSelectedColor] = useState(noteColors[0]);
   const router = useRouter();
 
   const API_URL = "http://192.168.1.105:8000"; // replace with your system IP
@@ -38,9 +39,10 @@ export default function AddNote() {
           "Content-Type": "application/json",
           'Accept': 'application/json'
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           title: title.trim(), 
-          content: content.trim() 
+          content: content.trim(), 
+          color: selectedColor,
         }),
       });
 
@@ -50,7 +52,7 @@ export default function AddNote() {
       }
       
       // Navigate back to home on success
-      router.replace("/");
+      router.back();
     } catch (err: unknown) {
       console.error('Error saving note:', err);
       const errorMessage = err instanceof Error ? err.message : 'Failed to save note. Please try again.';
@@ -64,7 +66,6 @@ export default function AddNote() {
     <KeyboardAvoidingView 
       style={{ flex: 1 }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    //   keyboardVerticalOffset={90}
     >
         <SafeAreaView style={{ flex: 1 }}>
       <ScrollView 
@@ -72,6 +73,12 @@ export default function AddNote() {
         contentContainerStyle={{ paddingBottom: 40 }}
       >
         <View style={{ marginBottom: 24 }}>
+          <Text style={[typography.h2, { marginBottom: 16 }]}>New Note</Text>
+
+          {error && (
+            <Text style={[commonStyles.errorText, { marginBottom: 16 }]}>{error}</Text>
+          )}
+
           <TextInput
             placeholder="Note Title"
             placeholderTextColor="#999"
@@ -110,16 +117,20 @@ export default function AddNote() {
             scrollEnabled
           />
 
-          {error && (
-            <View style={{ 
-              backgroundColor: '#ffebee', 
-              padding: 12, 
-              borderRadius: 8, 
-              marginTop: 8 
-            }}>
-              <Text style={{ color: colors.error, textAlign: 'center' }}>{error}</Text>
-            </View>
-          )}
+          <Text style={[typography.body, { marginBottom: 8 }]}>Choose a color:</Text>
+          <View style={commonStyles.colorPicker}>
+            {noteColors.map((color) => (
+              <TouchableOpacity
+                key={color}
+                style={[
+                  commonStyles.colorOption,
+                  selectedColor === color && commonStyles.colorOptionSelected,
+                  { backgroundColor: color }
+                ]}
+                onPress={() => setSelectedColor(color)}
+              />
+            ))}
+          </View>
 
           <TouchableOpacity
             style={[
