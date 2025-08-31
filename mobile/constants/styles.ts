@@ -48,6 +48,10 @@ interface Styles {
   container: ViewStyle;
   card: ViewStyle;
   input: TextStyle;
+  scrollView: ViewStyle;
+  scrollContent: ViewStyle;
+  headerGradient: ViewStyle;
+  header: ViewStyle;
   inputContainer: ViewStyle;
   searchContainer: ViewStyle;
   searchInnerContainer: ViewStyle;
@@ -58,9 +62,50 @@ interface Styles {
   colorPicker: ViewStyle;
   colorOption: ViewStyle;
   colorOptionSelected: ViewStyle;
+  backButton: ViewStyle;
+  headerTitle: TextStyle;
+  title: TextStyle;
+  actions: ViewStyle;
 }
 
 export const commonStyles = StyleSheet.create<Styles>({
+  scrollView: {
+    flex: 1,
+    width: '100%',
+  },
+  scrollContent: {
+    padding: 16,
+    paddingBottom: 40,
+  },
+  headerGradient: {
+    padding: 20,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    marginBottom: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  backButton: {
+    padding: 8,
+  },
+  headerTitle: {
+    ...typography.h1,
+    color: 'white',
+    textAlign: 'center',
+    flex: 1,
+  },
+  title: {
+    ...typography.h1,
+    marginBottom: 20,
+  },
+  actions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
